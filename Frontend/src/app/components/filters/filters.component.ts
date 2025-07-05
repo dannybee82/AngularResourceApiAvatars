@@ -21,9 +21,9 @@ export class FiltersComponent implements OnInit {
  
   filterForm: UntypedFormGroup = new FormGroup({});
 
-  filterValues: OutputEmitterRef<FilterData | undefined> = output<FilterData | undefined>();
+  readonly filterValues: OutputEmitterRef<FilterData | undefined> = output<FilterData | undefined>();
 
-  isFilterOn: WritableSignal<boolean> = signal(false);
+  protected isFilterOn: WritableSignal<boolean> = signal(false);
 
   private fb = inject(FormBuilder);
   private titleCasePipe = inject(TitleCasePipe);
@@ -96,18 +96,20 @@ export class FiltersComponent implements OnInit {
     const index: number = keys.indexOf(name);
 
     if(index > -1) {
-      const property = keys[index] as keyof typeof filterData;
-      const targetValues: (string[] | boolean) | undefined = filterData[property];
-      
-      if(targetValues) { 
-        if(Array.isArray(targetValues)) { 
-          let arr: string[] = (targetValues as string[]).filter(item => item !== value);
-          
-          //@ts-ignore
-          filterData[property] = arr.length === 0 ? undefined : arr;
-        } else {
-          filterData[property] = undefined;
-        }
+      const property = keys[index] as keyof FilterData;  
+      const targetValues = filterData[property];  
+        
+      if (targetValues) {  
+        if (typeof targetValues === 'boolean') {  
+          filterData[property] = undefined;  
+        } else {  
+          // For string array properties  
+          // Use a type assertion to tell TypeScript this is a string[] property  
+          const stringArrayProperty = property as keyof Pick<FilterData, 'hairColor' | 'eyeColor'>;  
+          const workValues = targetValues as string[];  
+          let arr = workValues.filter(item => item !== value);  
+          filterData[stringArrayProperty] = arr.length === 0 ? [] : arr;  
+        }  
       }
 
       if(filterData.hairColor || filterData.eyeColor || filterData.hasEarrings === true) {

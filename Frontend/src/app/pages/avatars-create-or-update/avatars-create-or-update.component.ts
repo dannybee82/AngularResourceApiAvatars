@@ -31,12 +31,12 @@ import { AvatarDeleteService } from '../../services/avatars/avatar-delete.servic
 })
 export class AvatarsCreateOrUpdateComponent extends GenericsCreateOrUpdateClass<AvatarPerson> implements OnInit {
 
-  mode: InputSignal<string> = input.required();
-  id: InputSignal<number> = input.required();
+  readonly mode: InputSignal<string> = input.required();
+  readonly id: InputSignal<number> = input.required();
 
-  isUpdateMode: WritableSignal<boolean> = signal(false);
-  previewImageData: WritableSignal<string> = signal('');
-  showDialog: WritableSignal<boolean> = signal(false);
+  protected isUpdateMode: WritableSignal<boolean> = signal(false);
+  protected previewImageData: WritableSignal<string> = signal('');
+  protected showDialog: WritableSignal<boolean> = signal(false);
   
   dialogData: Dialog = {
     dialogType: DialogType.WARNING,
@@ -81,6 +81,7 @@ export class AvatarsCreateOrUpdateComponent extends GenericsCreateOrUpdateClass<
 
   isAvatarDeleted: EffectRef = effect(() => {
     if(this.avatarDeleteService.data() && this.avatarDeleteService.status() === 'resolved') {
+      this.avatarDeleteService.targetId.set(0);
       this.toastr.success('Avatar deleted successfully');
       this.router.navigate(['/all-avatars']);
     }

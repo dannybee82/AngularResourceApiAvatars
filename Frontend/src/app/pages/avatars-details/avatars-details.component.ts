@@ -15,7 +15,7 @@ import { TitleCasePipe } from '@angular/common';
 })
 export class AvatarsDetailsComponent extends GenericsByIdClass<AvatarPerson> implements OnInit {
 
-  id: InputSignal<number> = input.required();
+  readonly id: InputSignal<number> = input.required();
   
   constructor() {
     super(

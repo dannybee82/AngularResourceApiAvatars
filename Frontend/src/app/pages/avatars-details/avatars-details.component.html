@@ -4,7 +4,6 @@
             Loading...
         </div>
     }
-
     @if(this.data() && !this.isLoading()) {
         <div class="row p-1 w-100">
             <mat-card appearance="outlined" class="w-25">
@@ -36,7 +35,6 @@
             </mat-card>
         </div>
     }
-
     @if(this.error()) {
         <div class="row p-1">
             Error: Can't fetch Avatar.

@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { MenuComponent } from './components/menu/menu.component';
-import { ScrollToTopComponent } from './components/scroll-to-top/scroll-to-top.component';
 
 export const routes: Routes = [
     {

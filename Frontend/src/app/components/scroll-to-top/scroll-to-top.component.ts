@@ -14,7 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 export class ScrollToTopComponent {
 
-  isVisible: WritableSignal<boolean> = signal(false);
+  protected isVisible: WritableSignal<boolean> = signal(false);
 
   private max: number = 0;  
 
