@@ -7,6 +7,10 @@ export const routes: Routes = [
         component: MenuComponent,
         children: [
             {
+                path: '',
+                loadComponent: () => import('./pages/all-avatars/all-avatars.component').then(c => c.AllAvatarsComponent),                
+            },
+            {
                 path: 'all-avatars',
                 loadComponent: () => import('./pages/all-avatars/all-avatars.component').then(c => c.AllAvatarsComponent),                
             },

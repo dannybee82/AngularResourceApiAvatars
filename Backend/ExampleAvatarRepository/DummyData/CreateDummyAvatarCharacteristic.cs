@@ -16,178 +16,213 @@ namespace ExampleAvatarRepository.DummyData
             {
                 new AvatarCharacteristic()
                 {
-                    Id = 1,
+                    // Abi
                     HairColor = "blond",
                     EyeColor = "blue",
                     HasEarrings = true,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 2,
+                    // Abigaïl
                     HairColor = "blond",
                     EyeColor = "blue",
                     HasEarrings = true,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 3,
+                    // Alicia
                     HairColor = "blond",
                     EyeColor = "blue",
                     HasEarrings = false,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 4,
+                    // Amelie
+                    HairColor = "brond",
+                    EyeColor = "blue",
+                    HasEarrings = true,
+                },
+                new AvatarCharacteristic()
+                {
+                    // Anna
                     HairColor = "blond",
                     EyeColor = "blue",
                     HasEarrings = false,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 5,
+                    // Caitlin
                     HairColor = "blond",
                     EyeColor = "blue",
                     HasEarrings = true,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 6,
+                    // Caroline
                     HairColor = "brown",
                     EyeColor = "blue",
                     HasEarrings = false,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 7,
+                    // Celeste
+                    HairColor = "brown",
+                    EyeColor = "blue",
+                    HasEarrings = true,
+                },
+                new AvatarCharacteristic()
+                {
+                    // Chantal
                     HairColor = "blond",
                     EyeColor = "blue",
                     HasEarrings = true,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 8,
+                    // Danielle
                     HairColor = "blond",
                     EyeColor = "blue",
                     HasEarrings = false,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 9,
+                    // Frederique
                     HairColor = "blond",
                     EyeColor = "blue",
                     HasEarrings = false,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 10,
+                    // Isabella
+                    HairColor = "blond",
+                    EyeColor = "blue",
+                    HasEarrings = false,
+                },
+                new AvatarCharacteristic()
+                {
+                    // Juliette
                     HairColor = "red",
                     EyeColor = "green",
                     HasEarrings = true,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 11,
+                    // Lydia
                     HairColor = "brown",
                     EyeColor = "blue",
                     HasEarrings = false,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 12,
+                    // Lynda
                     HairColor = "blond",
                     EyeColor = "blue",
                     HasEarrings = false,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 13,
+                    // Matilda
                     HairColor = "brown",
                     EyeColor = "brown",
                     HasEarrings = false,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 14,
+                    // Marlene
                     HairColor = "blond",
                     EyeColor = "blue",
                     HasEarrings = true,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 15,
+                    // Nadia
+                    HairColor = "blond",
+                    EyeColor = "blue",
+                    HasEarrings = true,
+                },
+                 new AvatarCharacteristic()
+                {
+                    // Octavia
+                    HairColor = "brown",
+                    EyeColor = "brown",
+                    HasEarrings = false,
+                },
+                new AvatarCharacteristic()
+                {
+                    // Olivia
                     HairColor = "blond",
                     EyeColor = "blue",
                     HasEarrings = true,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 16,
-                    HairColor = "blond",
-                    EyeColor = "blue",
-                    HasEarrings = true,
-                },
-                new AvatarCharacteristic()
-                {
-                    Id = 17,
+                    // Patricia
                     HairColor = "red",
                     EyeColor = "blue",
                     HasEarrings = true,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 18,
+                    // Rebecca
                     HairColor = "blond",
                     EyeColor = "blue",
                     HasEarrings = true,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 19,
+                    // Saskia
                     HairColor = "blond",
                     EyeColor = "green",
                     HasEarrings = false,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 20,
+                    // Savannah
                     HairColor = "brown",
                     EyeColor = "brown",
                     HasEarrings = true,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 21,
+                    // Serana
                     HairColor = "brown",
                     EyeColor = "blue",
                     HasEarrings = false,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 22,
+                    // Tess
                     HairColor = "blond",
                     EyeColor = "blue",
                     HasEarrings = false,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 23,
+                    // Trinity
                     HairColor = "blond",
                     EyeColor = "blue",
                     HasEarrings = true,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 24,
+                    // Victoria
                     HairColor = "brown",
                     EyeColor = "brown",
                     HasEarrings = true,
                 },
                 new AvatarCharacteristic()
                 {
-                    Id = 25,
+                    // Vicky
                     HairColor = "blond",
                     EyeColor = "brown",
                     HasEarrings = true,
+                },
+                new AvatarCharacteristic()
+                {
+                    // Violet
+                    HairColor = "blond",
+                    EyeColor = "blue",
+                    HasEarrings = false,
                 },
             };
         }

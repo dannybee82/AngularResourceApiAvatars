@@ -3,9 +3,11 @@ import { ResourceStatus, Signal } from "@angular/core";
 export interface GenericsShared {
     isLoading: Signal<boolean>;
     
-    error: Signal<unknown>;
+    error: Signal<Error | undefined>;
 
     status: Signal<ResourceStatus>;
 
-    destroyResource(): void;
+    destroy(): void;
+
+    reload(): void;
 }

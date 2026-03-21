@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { AvatarPerson } from '../../models/avatar/avatar-person.interface';
 import { FiltersComponent } from '../../components/filters/filters.component';
 import { FilterData } from '../../models/filter/filter-data.interface';
-import { GenericsByParamsClass } from '../../services/generics/by_params/generics-by-params.abstract';
+import { GenericsByParamsService } from '../../services/generics/by_params/generics-by-params.abstract';
 import { AllMaterialsModule } from '../../all-materials.module';
 import { RouterLink } from '@angular/router';
 import { ScrollToTopComponent } from '../../components/scroll-to-top/scroll-to-top.component';
+import { RESOURCE_CONFIG } from '../../services/generics/tokens/resource.config';
+import { GenericsAllService } from '../../services/generics/all/generics-all';
 
 @Component({
   selector: 'app-all-avatars',
@@ -16,32 +18,38 @@ import { ScrollToTopComponent } from '../../components/scroll-to-top/scroll-to-t
     ScrollToTopComponent
   ],
   templateUrl: './all-avatars.component.html',
-  styleUrl: './all-avatars.component.scss'
+  styleUrl: './all-avatars.component.scss',
+  providers: [  
+    GenericsAllService, GenericsByParamsService,  
+    {  
+      provide: RESOURCE_CONFIG,  
+      useValue: {  
+        controller: 'Avatar',  
+        methodGetAll: 'GetAll',  
+        methodByParams: 'Filter'  
+      }  
+    }  
+  ]
 })
-export class AllAvatarsComponent extends GenericsByParamsClass<AvatarPerson> implements OnInit {
+export class AllAvatarsComponent {
 
-  constructor() {
-    super(
-      'Avatar',
-      'GetAll',
-      'Filter'
-    );
-  }
+  protected filterData: WritableSignal<FilterData | undefined> = signal(undefined);
 
-  ngOnInit(): void {
-    if(this.data()) {
-      this.reload();
-    }    
-  }
+  protected readonly avatarServiceAll = inject(GenericsAllService<AvatarPerson>);
+  protected readonly avatarServiceByParams = inject(GenericsByParamsService<AvatarPerson, FilterData>);
 
   filterAvatars($event: FilterData | undefined): void {
     if($event) {
-      this.targetParams.set($event);
-      this.reload();
+      this.filterData.set($event);
+      this.avatarServiceByParams.params.set($event);
     } else {
-      this.targetParams.set(undefined);
-      this.reload();
+      this.filterData.set(undefined);
+      this.avatarServiceByParams.params.set(undefined);
     }
+  }
+
+  get service() {
+    return this.filterData() === undefined ? this.avatarServiceAll : this.avatarServiceByParams;
   }
 
 }

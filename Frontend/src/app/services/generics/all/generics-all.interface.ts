@@ -1,11 +1,7 @@
 import { ResourceRef, Signal } from "@angular/core";
 
-export interface GenericsAllInterface<T> {
-    getAllResource: ResourceRef<T[] | undefined>;
-   
+export interface GenericsAllInterface<T> {   
     data: Signal<T[] | undefined>    
 
-    reload(): void;
-
-    hasValue: boolean;
+    hasValue: Signal<boolean>;
 }

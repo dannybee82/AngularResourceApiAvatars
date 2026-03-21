@@ -1,0 +1,50 @@
+import { GenericsDeleteInterface } from "./generics-delete.interface";
+import { GenericsShared } from "../shared/generics-shared.interface";
+import { environment } from "../../../../environments/environment";
+import { computed, inject, Injectable, resource, ResourceRef, ResourceStatus, Signal, signal, WritableSignal } from "@angular/core";
+import { RESOURCE_CONFIG } from "../tokens/resource.config";
+
+@Injectable({
+  providedIn: 'root'
+})  
+export class GenericsDeleteService implements GenericsDeleteInterface, GenericsShared {
+    private readonly config = inject(RESOURCE_CONFIG);  
+    private readonly api: string = environment.endpoint;  
+    
+    id: WritableSignal<number | undefined> = signal(undefined);
+
+    private readonly resource: ResourceRef<boolean | undefined> = resource({
+        params: this.id,
+        loader: async () => {
+            if(this.id() && this.config.controller && this.config.methodDelete) {
+                const response = await fetch(
+                    `${this.api}${this.config.controller}/${this.config.methodDelete}/?id=${this.id()}`,
+                    {
+                      method: 'DELETE',  
+                      headers: {"Content-Type": "application/json"}
+                    }
+                );
+                    
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return await response.ok ? true : false;
+            } 
+        
+            return undefined;   
+        }
+    });
+
+    readonly data: WritableSignal<boolean | undefined> = this.resource.value;  
+    readonly isLoading: Signal<boolean> = this.resource.isLoading;  
+    readonly error: Signal<Error | undefined>   = this.resource.error;  
+    readonly hasValue: Signal<boolean> = computed(() => this.resource.hasValue());
+    readonly status: Signal<ResourceStatus> = this.resource.status;
+
+    reload(): void 
+    { 
+      this.resource.reload(); 
+    }  
+
+    destroy(): void { 
+      this.resource.destroy(); 
+    }
+}

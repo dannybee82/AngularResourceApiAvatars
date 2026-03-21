@@ -1,66 +1,55 @@
-import { resource, ResourceRef, ResourceStatus, Signal, signal, WritableSignal } from "@angular/core";
-import { GenericsByParamsInterface } from "./generics-by-params.interface";
-import { environment } from "../../../../environments/environment";
-import { GenericsShared } from "../shared/generics-shared.interface";
+import {  computed, inject, Injectable, resource, ResourceRef, ResourceStatus,  Signal, signal, WritableSignal } from '@angular/core';  
+import { environment } from '../../../../environments/environment';  
+import { RESOURCE_CONFIG, ResourceConfig } from '../tokens/resource.config';
+import { GenericsByParamsInterface } from './generics-by-params.interface';
+import { GenericsShared } from '../shared/generics-shared.interface';
+  
+@Injectable({
+  providedIn: 'root'
+})  
+export class GenericsByParamsService<T, U> implements GenericsByParamsInterface<T>, GenericsShared {
+ 
+  private readonly config: ResourceConfig = inject(RESOURCE_CONFIG);  
+  private readonly api: string = environment.endpoint;  
+  
+  readonly params: WritableSignal<U | undefined> = signal(undefined);  
+  
+  private readonly resource: ResourceRef<T[] | undefined> = resource<T[], U | undefined>({  
+    params: () => this.params(),
+    loader: async ({ params, abortSignal }) => { 
+      const url = params
+        ? this.buildParamsUrl(params)  
+        : `${this.api}${this.config.controller}/${this.config.methodGetAll}`;  
+  
+      const response = await fetch(url, {  
+        signal: abortSignal,  
+        headers: { 'Content-Type': 'application/json' }  
+      });  
+      
+      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);  
+      return response.json() as Promise<T[]>;  
+    }  
+  });  
 
-const api: string = environment.endpoint;
+  readonly data: Signal<T[] | undefined> = this.resource.value;  
+  readonly isLoading: Signal<boolean> = this.resource.isLoading;  
+  readonly error: Signal<Error | undefined> = this.resource.error;  
+  readonly status: Signal<ResourceStatus> = this.resource.status;  
+  readonly hasValue: Signal<boolean> = computed(() => this.resource.hasValue()); 
+  
+  reload(): void 
+  { 
+    this.resource.reload(); 
+  }  
 
-export abstract class  GenericsByParamsClass<T> implements GenericsByParamsInterface<T>, GenericsShared {
-
-  constructor(
-    protected controller: string,
-    protected methodnameGetAll: string,
-    protected methodnameByParams: string
-  ) {}
-
-  targetParams: WritableSignal<any | undefined> = signal(undefined);
-
-  getByParamsResource: ResourceRef<T[] | undefined> = resource({
-    loader: async (params) => {
-      if(!this.targetParams()) {
-        const response = await fetch(
-          `${api}${this.controller}/${this.methodnameGetAll}?id=${params.params}`, 
-          {
-            signal: params.abortSignal, 
-            headers: {"Content-Type": "application/json"}
-          }
-        );  
-        
-        return await response.json() as T[];
-      }
-
-      if(this.targetParams()) {
-        const params = new URLSearchParams();
-        Object.entries(this.targetParams()).forEach(([key, value]) => {  
-          params.append(key, String(value));
-        });
-
-        const response = await fetch(
-          `${api}${this.controller}/${this.methodnameByParams}?${params.toString()}`, 
-          {
-            headers: {"Content-Type": "application/json"}
-          }
-        );  
-        
-        return await response.json() as T[];
-      }
-          
-      return undefined;
-    }    
-  });
-
-  data: Signal<T[] | undefined> = this.getByParamsResource.value;
-  isLoading: Signal<boolean> = this.getByParamsResource.isLoading;
-  error: Signal<unknown> = this.getByParamsResource.error;
-  status: Signal<ResourceStatus> = this.getByParamsResource.status;
-  hasValue: boolean = this.getByParamsResource.hasValue();
-
-  reload(): void {
-    this.getByParamsResource.reload();
-  }
-
-  destroyResource(): void {
-    this.getByParamsResource.destroy();
-  }
-
+  destroy(): void { 
+    this.resource.destroy(); 
+  }  
+  
+  private buildParamsUrl(params: Record<string, unknown>): string {  
+    const query = new URLSearchParams(  
+      Object.entries(params).map(([k, v]) => [k, String(v)])  
+    );  
+    return `${this.api}${this.config.controller}/${this.config.methodByParams}?${query}`;  
+  }  
 }
