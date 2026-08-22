@@ -68,7 +68,7 @@ _August 2026_
 
 \- Using the latest file naming conventions - and deleting the old schematics from _angular.json_
 
-\- Removed packages: _@angular/animations_, _ngx-toastr_ (replaced by a custom implementation using Angular Material Snackbar component).
+\- Removed package: _ngx-toastr_ (replaced by a custom implementation using Angular Material Snackbar component).
 
 \- Added more error messages in the pages.
 
