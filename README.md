@@ -1,6 +1,6 @@
-### **Angular 21 Resource Demo Avatars + .NET/C# WebAPI + PostgreSQL database**
+### **Angular 22 Resource Demo Avatars + .NET/C# WebAPI + PostgreSQL database**
 
-A demo that demonstrates the **Angular 21** _Resource_ function.  
+A demo that demonstrates the **Angular 22** _Resource_ function.  
 It uses a simple .NET/C# WebAPI as Backend and a PostgreSQL database.  
 The .NET/C# WebAPI stores Avatars/images in the database as base64-strings.
 
@@ -30,9 +30,9 @@ For more information see the link below:
 
 [https://learn.microsoft.com/en-us/ef/core/cli/dotnet](https://learn.microsoft.com/en-us/ef/core/cli/dotnet)
 
-### **Angular application (with** [**Angular CLI**](https://github.com/angular/angular-cli) **version 21.2.3) installation**
+### **Angular application (with** [**Angular CLI**](https://github.com/angular/angular-cli) **version 22.1.5) installation**
 
-**Angular 21** needs a **Node.js** version of at least _20.19.0_
+**Angular 22** needs a **Node.js** version of at least _22.22.3_
 
 **Command to install**
 
@@ -51,6 +51,28 @@ or shorter:
 _ng s --o_
 
 ### **Changelog:**
+
+**Backend:**
+
+\- Added 6 new Avatars.
+
+_August 2026_
+
+**Frontend:**
+
+\- Upgrade to _Angular 22_ and upgraded other packages.
+
+\- Migrated _@Injectable_ to _@Service_.
+
+\- Using the default: _ChangeDetectionStrategy.OnPush_ in stead of _ChangeDetectionStrategy.Eager_.
+
+\- Using the latest file naming conventions - and deleting the old schematics from _angular.json_
+
+\- Removed packages: _@angular/animations_, _ngx-toastr_ (replaced by a custom implementation using Angular Material Snackbar component).
+
+\- Added more error messages in the pages.
+
+\- Updated the image-cropper to the latest version. 
 
 _March 2026_
 

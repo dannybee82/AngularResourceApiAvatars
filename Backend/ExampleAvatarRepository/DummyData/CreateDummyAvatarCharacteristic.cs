@@ -51,6 +51,13 @@ namespace ExampleAvatarRepository.DummyData
                 },
                 new AvatarCharacteristic()
                 {
+                    // Aurora
+                    HairColor = "brond",
+                    EyeColor = "blue",
+                    HasEarrings = false,
+                },
+                new AvatarCharacteristic()
+                {
                     // Caitlin
                     HairColor = "blond",
                     EyeColor = "blue",
@@ -83,6 +90,20 @@ namespace ExampleAvatarRepository.DummyData
                     HairColor = "blond",
                     EyeColor = "blue",
                     HasEarrings = false,
+                }, 
+                new AvatarCharacteristic()
+                {
+                    // Emily
+                    HairColor = "blond",
+                    EyeColor = "blue",
+                    HasEarrings = true,
+                },
+                new AvatarCharacteristic()
+                {
+                    // Emma
+                    HairColor = "blond",
+                    EyeColor = "blue",
+                    HasEarrings = false,
                 },
                 new AvatarCharacteristic()
                 {
@@ -104,6 +125,20 @@ namespace ExampleAvatarRepository.DummyData
                     HairColor = "red",
                     EyeColor = "green",
                     HasEarrings = true,
+                },
+                new AvatarCharacteristic()
+                {
+                    // June
+                    HairColor = "brown",
+                    EyeColor = "blue",
+                    HasEarrings = false,
+                },
+                new AvatarCharacteristic()
+                {
+                    // Karolina
+                    HairColor = "brown",
+                    EyeColor = "green",
+                    HasEarrings = false,
                 },
                 new AvatarCharacteristic()
                 {
@@ -188,6 +223,13 @@ namespace ExampleAvatarRepository.DummyData
                     HairColor = "brown",
                     EyeColor = "blue",
                     HasEarrings = false,
+                },
+                new AvatarCharacteristic()
+                {
+                    // Sofia
+                    HairColor = "brown",
+                    EyeColor = "blue",
+                    HasEarrings = true,
                 },
                 new AvatarCharacteristic()
                 {
