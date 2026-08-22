@@ -52,11 +52,11 @@ _ng s --o_
 
 ### **Changelog:**
 
+_August 2026_
+
 **Backend:**
 
 \- Added 6 new Avatars.
-
-_August 2026_
 
 **Frontend:**
 
