@@ -14,20 +14,17 @@ export class GenericsByIdService<T> implements GenericsByIdInterface<T>, Generic
   
   readonly params: WritableSignal<Record<string, any> | undefined> = signal<Record<string, any> | undefined>(undefined);  
   
-  private readonly resource: ResourceRef<T | undefined> = resource<T | undefined, number | undefined>({    
-    loader: async ({ abortSignal }) => {  
-      if(this.params()) {
-         const res = await fetch(  
-          `${this.api}${this.config.controller}/${this.config.methodById}${this.prepareParams()}`,  
-          { signal: abortSignal, headers: { 'Content-Type': 'application/json' } }  
-        );  
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);  
-        return res.json() as Promise<T>;  
-      }    
-
-      return undefined;
+  private readonly resource: ResourceRef<T | undefined> = resource({  
+    params: () => this.params(),
+    loader: async ({ params, abortSignal }) => {  
+      const res = await fetch(  
+        `${this.api}${this.config.controller}/${this.config.methodById}${this.prepareParams(params)}`,  
+        { method: 'GET', signal: abortSignal, headers: { Accept: 'application/json' } }  
+      );  
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);  
+      return (await res.json()) as T;  
     }  
-  });  
+  }); 
   
   readonly data: WritableSignal<T | undefined> = this.resource.value;  
   readonly isLoading: Signal<boolean> = this.resource.isLoading;  
@@ -44,17 +41,16 @@ export class GenericsByIdService<T> implements GenericsByIdInterface<T>, Generic
     this.resource.destroy(); 
   }  
 
-  private prepareParams(): string {
-    let params: string = '';
+  private prepareParams(params: Record<string, any>): string {
+    let p: string = '';
 
-    if(this.params()) {
-      for (const [key, value] of Object.entries(this.params()!)) {
-        params = params === '' ? 
-          params += '?' + key + '=' + value : 
-          params += '&' + key + '=' + value;
-      }
+    for (const [key, value] of Object.entries(params)) {
+      p = p === '' ? 
+        p += '?' + key + '=' + value : 
+        p += '&' + key + '=' + value;
     }
 
-    return params;
+    return p;
   }
+  
 }

@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, InputSignal, ResourceStatus, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, computed, effect, inject, input, InputSignal, OnInit, ResourceStatus, Signal, signal, WritableSignal } from '@angular/core';
 import { AllMaterialsModule } from '../../all-materials.module';
 import { OpenFile } from '../../components/open-file/open-file';
 import { MatDialog } from '@angular/material/dialog';
@@ -41,7 +41,7 @@ import { ToastService } from '../../services/toast/toast-service';
     }  
   ]
 })
-export class AvatarsCreateOrUpdate {
+export class AvatarsCreateOrUpdate implements OnInit {
 
   readonly mode: InputSignal<'create' | 'update'> = input.required();
   readonly id: InputSignal<number> = input.required();
@@ -55,11 +55,14 @@ export class AvatarsCreateOrUpdate {
   private readonly router = inject(Router);
 
   readonly isUpdateMode: Signal<boolean> = computed(() => this.mode() === 'update');
+  private _avatarToUpdate: Signal<AvatarPerson | undefined> = computed(() => {
+    if(!this.byIdService.error() && !this.byIdService.isLoading() && this.byIdService.status() === 'resolved') {
+      return this.byIdService.data();
+    }
 
-  readonly avatar = this.byIdService.data;  
-  readonly isLoading = this.byIdService.isLoading;  
-  readonly error: Signal<Error | undefined> = this.byIdService.error;
-
+    return undefined;
+  });
+  
   protected previewImageData: WritableSignal<string> = signal('');
   protected showDialog: WritableSignal<boolean> = signal(false);
   
@@ -94,21 +97,12 @@ export class AvatarsCreateOrUpdate {
   });
 
   constructor() {
-    effect(() => {  
-      const params: Record<string, any> = {
-        id: this.id()
-      };
-      this.byIdService.params.set(this.isUpdateMode() ? params : undefined);  
-    });  
-  
-    effect(() => {  
-      const data: AvatarPerson = this.avatar();
-      if (data) 
-      {
-          this.formModel.set(data);
-          this.avatarForm().value.set(data);
-          this.previewImageData.set(data.avatarImage?.base64 ?? '');
-      }  
+    effect(() => {
+      if(this._avatarToUpdate()) {
+        this.formModel.set(this._avatarToUpdate()!);
+        this.avatarForm().value.set(this._avatarToUpdate()!);
+        this.previewImageData.set(this._avatarToUpdate()!.avatarImage?.base64 ?? '');        
+      }
     });
 
     effect(() => {
@@ -157,6 +151,16 @@ export class AvatarsCreateOrUpdate {
     });
   }
 
+  ngOnInit(): void {
+    if(this.id() && parseInt(this.id().toString()) !== -1 && !isNaN(parseInt(this.id().toString()))) {
+      const id: number = parseInt(this.id().toString());
+      const params: Record<string, any> = {
+        id: id
+      };
+      this.byIdService.params.set(params); 
+    }
+  }
+
   getFile(file: File): void {
     if(file) {
       const _file = URL.createObjectURL(file);
@@ -193,9 +197,9 @@ export class AvatarsCreateOrUpdate {
       avatarPerson.avatarImage!.base64 = this.previewImageData();
 
       if(this.isUpdateMode()) {
-        avatarPerson.id = this.byIdService.data().id;
-        avatarPerson.avatarCharacteristic!.id = this.byIdService.data().avatarCharacteristic?.id ?? 0;
-        avatarPerson.avatarImage!.id = this.byIdService.data().avatarImage?.id ?? 0;
+        avatarPerson.id = this._avatarToUpdate()!.id;
+        avatarPerson.avatarCharacteristic!.id = this._avatarToUpdate()!.avatarCharacteristic?.id ?? 0;
+        avatarPerson.avatarImage!.id = this._avatarToUpdate()!.avatarImage?.id ?? 0;
         this.updateService.entity.set(avatarPerson);
       } else {
         this.createService.entity.set(avatarPerson);
@@ -209,7 +213,7 @@ export class AvatarsCreateOrUpdate {
   deleteAvatar(): void {
     if(this.isUpdateMode()) {
       this.dialogData.dialogMessage = 'Do you want to delete the Avatar below?';
-      this.dialogData.dialogAdditionalText = `Avatar: ${this.byIdService.data().name} - Age: ${this.byIdService.data()!.age}`;  
+      this.dialogData.dialogAdditionalText = `Avatar: ${this.formModel().name} - Age: ${this.formModel().age}`;  
       this.showDialog.set(true);
     }   
   }

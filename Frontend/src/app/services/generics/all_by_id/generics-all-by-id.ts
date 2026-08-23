@@ -18,18 +18,14 @@ export class GenericsAllByIdService<T> implements GenericsAllByIdInterface<T>, G
     
     private readonly resource: ResourceRef<T[] | undefined> = resource<T[] | undefined, unknown>({  
         defaultValue: this._defaultValue ?? undefined,
-        loader: async ({ abortSignal }) => { 
-            if(this.config.controller && this.config.methodGetAll && this.params()) {
-                const res = await fetch(  
-                    `${this.api}${this.config.controller}/${this.config.methodGetAll}${this.prepareParams()}`,  
-                    { signal: abortSignal, headers: { 'Content-Type': 'application/json' } }  
-                );
-            
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);  
-                return res.json() as Promise<T[]>;
-            }               
-
-            return undefined;  
+        params: () => this.params(),
+        loader: async ({ params, abortSignal }) => { 
+            const res = await fetch(  
+                `${this.api}${this.config.controller}/${this.config.methodGetAllById}${this.prepareParams(params!)}`,  
+                { method: 'GET', signal: abortSignal, headers: { Accept: 'application/json' } }  
+            );  
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);  
+            return (await res.json()) as T[];
         }  
     });  
       
@@ -48,16 +44,16 @@ export class GenericsAllByIdService<T> implements GenericsAllByIdInterface<T>, G
         this.resource.destroy(); 
     }  
 
-    private prepareParams(): string {
-        let params: string = '';
+    private prepareParams(params: Record<string, any>): string {
+        let p: string = '';
         if(this.params()) {
-            for (const [key, value] of Object.entries(this.params()!)) {
-                params = params === '' ? 
-                    params += '?' + key + '=' + value : 
-                    params += '&' + key + '=' + value;
+            for (const [key, value] of Object.entries(params)) {
+                p = p === '' ? 
+                    p += '?' + key + '=' + value : 
+                    p += '&' + key + '=' + value;
             }
         }
 
-        return params;
+        return p;
     }
 }
