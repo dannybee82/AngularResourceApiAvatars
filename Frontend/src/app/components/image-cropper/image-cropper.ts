@@ -15,8 +15,8 @@ export class ImageCropper implements OnInit {
   sanitizedUrl!: SafeUrl;
   cropper!: Cropper;
 
-  private _maxWidth: number = 300;
-  private _maxHeight: number = 300;
+  private _maxWidth: number = 400;
+  private _maxHeight: number = 400;
   private _minSize: number = 100;
   private _boundCheckMaxSize = this.checkMaxSize.bind(this);
   private _selection: any;

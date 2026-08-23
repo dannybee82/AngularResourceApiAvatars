@@ -2,7 +2,7 @@ import { Component, effect, inject, signal, WritableSignal } from '@angular/core
 import { AvatarPerson } from '../../models/avatar/avatar-person.interface';
 import { Filters } from '../../components/filters/filters';
 import { FilterData } from '../../models/filter/filter-data.interface';
-import { GenericsByParamsService } from '../../services/generics/by_params/generics-by-params.abstract';
+import { GenericsByParamsService } from '../../services/generics/by_params/generics-by-params';
 import { AllMaterialsModule } from '../../all-materials.module';
 import { RouterLink } from '@angular/router';
 import { ScrollToTop } from '../../components/scroll-to-top/scroll-to-top';

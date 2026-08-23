@@ -1,12 +1,12 @@
 ### **Angular 22 Resource Demo Avatars + .NET/C# WebAPI + PostgreSQL database**
 
-A demo that demonstrates the **Angular 22** _Resource_ function.  
+A demo that demonstrates the **Angular 22** _Resource API_.  
 It uses a simple .NET/C# WebAPI as Backend and a PostgreSQL database.  
 The .NET/C# WebAPI stores Avatars/images in the database as base64-strings.
 
-The Angular application uses interfaces and abstract Injectables to reduce the amount of code.  
+The Angular application uses interfaces and Injectables to reduce the amount of code.  
 And the Angular application can fetch, filter, create, update and delete Avatars/images.  
-The Angular application is _Zoneless_ (no Zone.js) and without _RxJs_.  
+The Angular application is _Zoneless_ (no Zone.js) and without _RxJs_.
 
 See the images in the root of this project for examples.
 
@@ -25,6 +25,10 @@ Install the **dotnet ef-tool** - version: 8.0.11 or above
 When the tool is installed, run the command for a _database migration:_
 
 **dotnet ef database update**
+
+Or use the longer command (and replace \*your\_workspace\*):
+
+_dotnet ef database update -p "\*your\_workspace\*/Backend/ExampleAvatarRepository/ExampleAvatarRepository.csproj" --startup-project "\*your\_workspace\*/Backend/ExampleAvatarsApp/ExampleAvatarsApp.csproj"_
 
 For more information see the link below:
 
@@ -72,7 +76,9 @@ _August 2026_
 
 \- Added more error messages in the pages.
 
-\- Updated the image-cropper to the latest version. 
+\- Updated the image-cropper to the latest version.
+
+\- Changes to generic classes/injectables.
 
 _March 2026_
 

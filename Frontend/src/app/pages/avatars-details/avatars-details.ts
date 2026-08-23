@@ -41,7 +41,10 @@ export class AvatarsDetails implements OnInit {
   }
  
   ngOnInit(): void {
-    this.avatarService.id.set(this.id());
+    const params: Record<string, any> = {
+      id: this.id()
+    };
+    this.avatarService.params.set(params);
   }
 
 }

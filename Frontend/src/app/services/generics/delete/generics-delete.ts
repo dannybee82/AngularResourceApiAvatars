@@ -13,7 +13,7 @@ export class GenericsDeleteService implements GenericsDeleteInterface, GenericsS
     
     id: WritableSignal<number | undefined> = signal(undefined);
 
-    private readonly resource: ResourceRef<boolean | undefined> = resource({
+    private readonly resource: ResourceRef<boolean | undefined> = resource<boolean | undefined, unknown>({
         params: this.id,
         loader: async () => {
             if(this.id() && this.config.controller && this.config.methodDelete) {

@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, resource, ResourceStatus, Signal, signal, WritableSignal } from "@angular/core";
+import { computed, inject, Injectable, resource, ResourceRef, ResourceStatus, Signal, signal, WritableSignal } from "@angular/core";
 import { environment } from "../../../../environments/environment";
 import { RESOURCE_CONFIG } from "../tokens/resource.config";
 import { GenericsShared } from "../shared/generics-shared.interface";
@@ -6,24 +6,26 @@ import { GenericsByIdInterface } from "./generics-by-id.interface";
 
 @Injectable({
   providedIn: 'root'
-})  
+})
 export class GenericsByIdService<T> implements GenericsByIdInterface<T>, GenericsShared {
 
   private readonly config = inject(RESOURCE_CONFIG);  
   private readonly api = environment.endpoint;  
   
-  readonly id: WritableSignal<number | undefined> = signal(undefined);  
+  readonly params: WritableSignal<Record<string, any> | undefined> = signal<Record<string, any> | undefined>(undefined);  
   
-  private readonly resource = resource<T | undefined, number | undefined>({  
-    params: () => this.id(),  
-    loader: async ({ params: id, abortSignal }) => {  
-      if (!id) return undefined;  
-      const res = await fetch(  
-        `${this.api}${this.config.controller}/${this.config.methodById}?id=${id}`,  
-        { signal: abortSignal, headers: { 'Content-Type': 'application/json' } }  
-      );  
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);  
-      return res.json() as Promise<T>;  
+  private readonly resource: ResourceRef<T | undefined> = resource<T | undefined, number | undefined>({    
+    loader: async ({ abortSignal }) => {  
+      if(this.params()) {
+         const res = await fetch(  
+          `${this.api}${this.config.controller}/${this.config.methodById}${this.prepareParams()}`,  
+          { signal: abortSignal, headers: { 'Content-Type': 'application/json' } }  
+        );  
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);  
+        return res.json() as Promise<T>;  
+      }    
+
+      return undefined;
     }  
   });  
   
@@ -41,4 +43,18 @@ export class GenericsByIdService<T> implements GenericsByIdInterface<T>, Generic
   destroy(): void { 
     this.resource.destroy(); 
   }  
+
+  private prepareParams(): string {
+    let params: string = '';
+
+    if(this.params()) {
+      for (const [key, value] of Object.entries(this.params()!)) {
+        params = params === '' ? 
+          params += '?' + key + '=' + value : 
+          params += '&' + key + '=' + value;
+      }
+    }
+
+    return params;
+  }
 }

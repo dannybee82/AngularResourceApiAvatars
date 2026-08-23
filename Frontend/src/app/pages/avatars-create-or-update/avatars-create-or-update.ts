@@ -95,7 +95,10 @@ export class AvatarsCreateOrUpdate {
 
   constructor() {
     effect(() => {  
-      this.byIdService.id.set(this.isUpdateMode() ? this.id() ?? "0" : undefined);  
+      const params: Record<string, any> = {
+        id: this.id()
+      };
+      this.byIdService.params.set(this.isUpdateMode() ? params : undefined);  
     });  
   
     effect(() => {  
@@ -160,7 +163,6 @@ export class AvatarsCreateOrUpdate {
 
       this.openAvatarEditor(_file).subscribe((result: string) => {
         if (result) {
-          console.log(result);
           this.loadImagePreview(result);
         }
       });

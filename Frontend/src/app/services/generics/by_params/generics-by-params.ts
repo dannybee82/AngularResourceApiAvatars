@@ -13,21 +13,26 @@ export class GenericsByParamsService<T, U> implements GenericsByParamsInterface<
   private readonly api: string = environment.endpoint;  
   
   readonly params: WritableSignal<U | undefined> = signal(undefined);  
+  readonly additionalParams: WritableSignal<Record<string, any> | undefined> = signal<Record<string, any> | undefined>(undefined);
   
-  private readonly resource: ResourceRef<T[] | undefined> = resource<T[], U | undefined>({  
+  private readonly resource: ResourceRef<T[] | undefined> = resource<T[] | undefined, unknown>({  
     params: () => this.params(),
-    loader: async ({ params, abortSignal }) => { 
-      const url = params
-        ? this.buildParamsUrl(params)  
+    loader: async ({ abortSignal }) => { 
+      if(this.params()) {
+        const url = this.params()
+        ? this.buildParamsUrl(this.params()!, this.additionalParams())  
         : `${this.api}${this.config.controller}/${this.config.methodGetAll}`;  
   
-      const response = await fetch(url, {  
-        signal: abortSignal,  
-        headers: { 'Content-Type': 'application/json' }  
-      });  
+        const response = await fetch(url, {  
+          signal: abortSignal,  
+          headers: { 'Content-Type': 'application/json' }  
+        });  
+        
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);  
+        return response.json() as Promise<T[]>;  
+      }
       
-      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);  
-      return response.json() as Promise<T[]>;  
+      return undefined;
     }  
   });  
 
@@ -46,10 +51,21 @@ export class GenericsByParamsService<T, U> implements GenericsByParamsInterface<
     this.resource.destroy(); 
   }  
   
-  private buildParamsUrl(params: Record<string, unknown>): string {  
+  private buildParamsUrl(params: Record<string, unknown>, additionalParams: Record<string, any> | undefined): string {  
     const query = new URLSearchParams(  
       Object.entries(params).map(([k, v]) => [k, String(v)])  
-    );  
-    return `${this.api}${this.config.controller}/${this.config.methodByParams}?${query}`;  
+    ); 
+    
+    if(additionalParams) {
+      let p: string = '';
+      
+      for (const [key, value] of Object.entries(this.params()!)) {
+        p += '&' + key + '=' + value;
+      }
+
+      return `${this.api}${this.config.controller}/${this.config.methodByParams}?${query}${p}`;
+    }
+    
+    return `${this.api}${this.config.controller}/${this.config.methodByParams}?${query}`;
   }  
 }

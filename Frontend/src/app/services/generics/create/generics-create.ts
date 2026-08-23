@@ -15,7 +15,7 @@ export class GenericsCreateService<T> implements GenericsCreateInterface<T>, Gen
     
     entity: WritableSignal<T | undefined> = signal(undefined);
 
-    private readonly resource: ResourceRef<boolean | undefined> = resource({
+    private readonly resource: ResourceRef<boolean | undefined> = resource<boolean | undefined, unknown>({
         params: this.entity,
         loader: async () => {
             if(this.entity() && this.config.controller && this.config.methodCreate) {
